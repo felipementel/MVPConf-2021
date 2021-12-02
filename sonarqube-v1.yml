@@ -1,0 +1,59 @@
+parameters:
+- name: serverEndpoint
+  type: string
+
+- name: projectKey
+  type: string
+
+- name: projectName
+  type: string
+
+- name: slnPath
+  type: string
+  default: src/*.sln
+
+- name: buildConfiguration
+  type: string
+  default: Release
+  values:
+  - Release
+  - Debug
+
+- name: version
+  type: string
+  default: 6.0.x
+  values:
+  - 3.1.x
+  - 5.0.x
+  - 6.0.x
+
+steps:
+
+  - task: SonarQubePrepare@4
+    inputs:
+      SonarQube: ${{ parameters.serverEndpoint }}
+      scannerMode: 'MSBuild'
+      projectName: ${{ parameters.projectName }}
+      projectKey: ${{ parameters.projectKey }}
+
+  - task: UseDotNet@2
+    inputs:
+      version: ${{ parameters.version }}
+      packageType: sdk
+      includePreviewVersions: false
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      command: 'build'
+      projects: |
+        ${{ parameters.slnPath }}
+      arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration ${{ parameters.buildConfiguration }}
+      verbosityRestore: Detailed
+
+
+  - task: SonarQubeAnalyze@4
+
+  - task: SonarQubePublish@4
+    inputs:
+      pollingTimeoutSec: '300'

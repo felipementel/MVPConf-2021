@@ -1,0 +1,26 @@
+parameters:
+- name: imageRepository
+  type: string
+
+- name: dockerfilePath
+  type: string
+  default: '**/Dockerfile'
+
+- name: acrServiceConnection
+  type: string
+  default: acr-mvpconf2021-dev
+
+- name: tag
+  type: string
+  default: $(Build.BuildId)-dev
+    
+steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: ${{ parameters.imageRepository }}
+        dockerfile: ${{ parameters.dockerfilePath }}
+        containerRegistry: ${{ parameters.acrServiceConnection }}
+        tags: |
+          ${{ parameters.tag }}

@@ -1,0 +1,40 @@
+parameters:
+- name: webappName
+  type: string
+
+- name: serviceConnectionAzure
+  type: string
+
+- name: containerRegistry
+  type: string
+
+- name: imageRepository
+  type: string
+
+- name: tag
+  type: string
+  default: $(Build.BuildId)-dev
+
+- name: resourceGroup
+  type: string
+
+
+steps:
+
+  - task: AzureWebAppContainer@1
+    displayName: Azure Web App on Container Deploy
+    inputs:
+      appName: ${{ parameters.webappName }}
+      azureSubscription: ${{ parameters.serviceConnectionAzure }}
+      imageName: ${{ parameters.containerRegistry }}/${{ parameters.imageRepository }}:${{ parameters.tag }}
+      resourceGroupName: ${{ parameters.resourceGroup }}
+      deployToSlotOrASE: false
+      #slotName: staging
+
+#  - task: AzureAppServiceManage@0
+#    displayName: 'Swap Slots'
+#    inputs:
+#      azureSubscription: ${{ serviceConnectionAzure }}
+#      WebAppName: ${{ appName)
+#      ResourceGroupName: ${{ resourceGroupName }}
+#      SourceSlot: staging

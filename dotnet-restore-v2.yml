@@ -1,0 +1,17 @@
+parameters:
+- name: slnPath
+  type: string
+  default: '**/*.sln'
+
+- name: nugetPath
+  type: string
+  default: 'src/nuget.config'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: ${{ parameters.slnPath }}
+    feedsToUse: config
+    nugetConfigPath: ${{ parameters.nugetPath }}

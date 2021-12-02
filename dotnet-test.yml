@@ -1,0 +1,26 @@
+parameters:
+- name: testsPath
+  type: string
+  default: '**/*Tests/*Tests.csproj'
+
+- name: testRunTitle
+  type: string
+  default: 'TITULO NÃO INFORMADO'
+    
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: 'test'
+      projects: |
+        ${{ parameters.testsPath }}
+      arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'  
+      testRunTitle: ${{ parameters.testRunTitle }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+      verbosityRestore: Detailed
+  
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage report'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml'

@@ -1,0 +1,11 @@
+parameters:
+- name: slnPath
+  type: string
+  default: '**/*.sln'
+
+steps:
+- task: NuGetToolInstaller@0
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: ${{ parameters.slnPath }}

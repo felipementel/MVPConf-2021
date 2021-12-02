@@ -1,0 +1,21 @@
+parameters:
+- name: slnPath
+  type: string
+  default: src/*.sln
+
+- name: buildConfiguration
+  type: string
+  default: Release
+  values:
+  - Release
+  - Debug
+ 
+steps: 
+ - task: DotNetCoreCLI@2
+   displayName: 'dotnet build'
+   inputs:
+     command: 'build'
+     projects: |
+       ${{ parameters.slnPath }}
+     arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration ${{ parameters.buildConfiguration }}
+     verbosityRestore: Detailed    

@@ -1,0 +1,15 @@
+parameters:
+- name: version
+  type: string
+  default: 6.0.x
+  values:
+  - 3.1.x
+  - 5.0.x
+  - 6.0.x
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      version: ${{ parameters.version }}
+      packageType: sdk
+      includePreviewVersions: false
