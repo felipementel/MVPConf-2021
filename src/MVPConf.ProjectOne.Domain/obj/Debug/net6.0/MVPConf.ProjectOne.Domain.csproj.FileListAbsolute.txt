@@ -1,0 +1,12 @@
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\bin\Debug\net6.0\MVPConf.ProjectOne.Domain.deps.json
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\bin\Debug\net6.0\MVPConf.ProjectOne.Domain.dll
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\bin\Debug\net6.0\ref\MVPConf.ProjectOne.Domain.dll
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\bin\Debug\net6.0\MVPConf.ProjectOne.Domain.pdb
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.csproj.AssemblyReference.cache
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.AssemblyInfoInputs.cache
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.AssemblyInfo.cs
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.csproj.CoreCompileInputs.cache
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.dll
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\ref\MVPConf.ProjectOne.Domain.dll
+D:\Apresentacoes\MVP-Conf2021\MVPConf.ProjectOne\src\MVPConf.ProjectOne.Domain\obj\Debug\net6.0\MVPConf.ProjectOne.Domain.pdb

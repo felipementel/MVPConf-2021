@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "58060f8e-4829-498c-a201-96facae56d83": {
+      "ProjectGuid": "58060f8e-4829-498c-a201-96facae56d83",
+      "DisplayName": "MVPConf.ProjectOne.Api",
+      "ColorIndex": 0
+    },
+    "ffcb5f68-aec2-41a7-bb7c-2c9eb384b676": {
+      "ProjectGuid": "ffcb5f68-aec2-41a7-bb7c-2c9eb384b676",
+      "DisplayName": "MVPConf.ProjectOne.Domain.Tests",
+      "ColorIndex": 1
+    },
+    "d5a083d5-c60c-49cc-8d1b-0d9a7a63fede": {
+      "ProjectGuid": "d5a083d5-c60c-49cc-8d1b-0d9a7a63fede",
+      "DisplayName": "MVPConf.ProjectOne.Domain",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
