@@ -1,0 +1,14 @@
+name: mvpconf-2021-projectOne-$(Build.BuildId)-$(Rev:r)
+
+trigger:
+  - none
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: MVPConf-2021-v1/Pipelines
+      trigger: none
+
+extends:
+  template: full-deploy.yml@templates

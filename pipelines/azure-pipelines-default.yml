@@ -1,0 +1,169 @@
+name: mvpconf-2021-projectOne-$(Build.BuildId)-$(Rev:r)
+
+resources:
+  repositories: 
+  - repository: self
+    type: git
+    trigger:
+      branches:
+        include:
+        - dev
+      paths:
+        include:
+        - src/*
+        exclude:
+        - README.md
+
+variables:
+- name: buildConfiguration
+  value: Release 
+- name: dockerfilePath
+  value: '**/Dockerfile'
+- name: tag
+  value: '$(Build.BuildId)-dev'
+- name: "imageRepository"
+  value: project-one
+- name: containerRegistryName
+  value: acmvpconf2021dev
+- name: appName
+  value: app-mvpconf2021-dev
+- name: ProjectTestName
+  value: 'Project One - Default'
+- name: 'vmImageName'
+  value: 'ubuntu-latest'
+- name: projectName
+  value: 'MVPConf.ProjectOne'
+- name: projectKey
+  value: MVPConf-2021-v1_MVPConf.ProjectOne
+
+- name: serviceConnectionAzure
+  value: rg-mvpconf2021-dev
+
+pool:
+  vmImage: $(vmImageName)
+
+stages:
+- stage: Build
+  displayName: Build and Test
+
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        version: '6.0.x'
+        packageType: sdk  
+        includePreviewVersions: false
+
+    - task: NuGetToolInstaller@0
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: src/*.sln
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: 'build'
+        projects: |
+          src/*.sln
+        arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration)
+        verbosityRestore: Detailed
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: 'test'
+        projects: |
+          **/*Tests.csproj
+        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+        testRunTitle: $(ProjectTestName)
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        verbosityRestore: Detailed
+    
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: $(Build.SourcesDirectory)/TestResults/Coverage/*.* #'$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml'
+
+- stage: SonarQube
+  dependsOn: Build
+  condition: succeeded()
+  displayName: SonarQube
+  jobs:  
+  - job: SonarQube
+    displayName: SonarQube
+    steps:
+    - task: SonarQubePrepare@4
+      inputs:
+        SonarQube: sonarqube-prd
+        scannerMode: 'MSBuild'
+        projectName: $(projectName)
+        projectKey: $(projectKey)
+
+    - task: UseDotNet@2
+      inputs:
+        version: '6.0.x'
+        packageType: sdk  
+        includePreviewVersions: false
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: 'build'
+        projects: |
+          src/*.sln
+        arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration)
+
+    - task: SonarQubeAnalyze@4
+
+    - task: SonarQubePublish@4
+      inputs:
+        pollingTimeoutSec: '300'
+
+- stage: Docker_Build
+  dependsOn: SonarQube
+  condition: succeeded()
+  displayName: ACR Build And Push
+  jobs:  
+  - job: ACR_Build_And_Push
+    displayName: ACR Build And Push
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: acr-mvpconf2021-dev
+        tags: |
+          $(tag)
+
+- stage: Deploy
+  displayName: Deploy
+  dependsOn: Docker_Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: MVPConf-2021-DevOps
+    variables:
+      - group: Global-Library
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebAppContainer@1
+            displayName: Azure Web App on Container Deploy
+            inputs:
+              appName: $(appName)
+              azureSubscription: $(serviceConnectionAzure)
+              imageName: $(containerRegistryName)/$(imageRepository):$(tag)

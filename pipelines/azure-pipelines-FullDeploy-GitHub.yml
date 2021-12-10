@@ -1,0 +1,14 @@
+name: mvpconf-2021-projectOne-$(Build.BuildId)-$(Rev:r)
+
+trigger:
+  - none
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: felipementel/MVPConf-2021 
+      endpoint: github.com_felipementel
+
+extends:
+  template: full-deploy.yml@templates
